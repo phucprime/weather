@@ -3,9 +3,14 @@ import styles from "../styles/Home.module.css";
 import Image from "next/image";
 
 export default function Home() {
+
   const [input, setInput] = useState("Ho Chi Minh");
   const [systemUsed, setSystemUsed] = useState("metric");
   const [weatherData, setWeatherData] = useState();
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = async () => {
     const res = await fetch("api/data", {
@@ -14,9 +19,8 @@ export default function Home() {
       body: JSON.stringify({ input }),
     });
     const data = await res.json();
-
     setWeatherData({ ...data });
-    setInput("");
+    // setInput("");
   };
 
   const enterKeydown = (event) => {
@@ -25,10 +29,7 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
-
+  // cal wind direction
   function degToCompass(num) {
     var val = Math.floor(num / 22.5 + 0.5);
     var arr = [
@@ -56,7 +57,6 @@ export default function Home() {
     const time = new Date((unixSeconds + timezone) * 1000)
       .toISOString()
       .match(/(\d{2}:\d{2})/);
-
     return time;
   };
 
